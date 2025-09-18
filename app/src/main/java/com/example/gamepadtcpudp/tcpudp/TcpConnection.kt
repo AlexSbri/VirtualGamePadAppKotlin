@@ -14,13 +14,22 @@ import java.net.Socket
 class TcpConnection {
     var socket: Socket ?= null
 
-    fun connectPc(udpDiscover: UdpDiscoverData){
+    fun connectPc(udpDiscover: UdpDiscoverResult){
+        when(udpDiscover){
+            is UdpDiscoverResult.Found -> {
+                val address = udpDiscover.tcpAddress
+                val port = udpDiscover.port
+                Log.d("Connect to Pc","Trovato : $address:$port")
 
-        Log.d("TCP CONNECTION", "udp discover address :: "+udpDiscover.tcpAddress + "\nudp discover port :: " +udpDiscover.tcpPort)
-        try {
-            socket = Socket(udpDiscover.tcpAddress, udpDiscover.tcpPort)
-        } catch (e : Exception){
-            Log.d("TcpConnection", "errore nella connessione:: $e")
+                try {
+                    socket = Socket(address, port)
+                } catch (e : Exception){
+                    Log.d("TcpConnection", "errore nella connessione:: $e")
+                }
+            }
+
+            is UdpDiscoverResult.NotFound -> Log.d("Connect to Pc","Pc non trovato")
+            UdpDiscoverResult.AwaitingDiscovery -> Log.d("Connect to Pc","Fare prima la ricerca del pc")
         }
     }
 

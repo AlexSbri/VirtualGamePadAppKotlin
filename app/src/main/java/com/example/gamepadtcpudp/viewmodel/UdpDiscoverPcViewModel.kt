@@ -26,6 +26,7 @@ class UdpDiscoverPcViewModel : ViewModel() {
             when(_discoverResult.value){
                 is UdpDiscoverResult.Found -> Log.d("VIEWMODEL UDP", "TCP ADDRESSS ::: ${discoverData}")
                 UdpDiscoverResult.NotFound -> Log.d("VIEWMODEL UDP", "TCP ADDRESSS ::: NOT FOUND")
+                UdpDiscoverResult.AwaitingDiscovery -> TODO()
             }
             Log.d("VIEWMODEL UDP", "TCP ADDRESSS ::: ${discoverData}")
         }

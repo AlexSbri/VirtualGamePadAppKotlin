@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gamepadtcpudp.tcpudp.TcpConnection
-import com.example.gamepadtcpudp.tcpudp.UdpDiscoverData
+import com.example.gamepadtcpudp.tcpudp.UdpDiscoverResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ class TcpConnectionViewModel : ViewModel() {
     //val tcpConnection: LiveData<TcpConnection> = _tcpConnection
     var tcpConnection = TcpConnection()
 
-    fun connectToPc(udpDiscoverPc: UdpDiscoverData){
+    fun connectToPc(udpDiscoverPc: UdpDiscoverResult){
         viewModelScope.launch(Dispatchers.IO) {
             tcpConnection.connectPc(udpDiscoverPc)
         }
