@@ -17,7 +17,7 @@ class UdpDiscoverPcViewModel : ViewModel() {
     private val _discoverResult = MutableStateFlow<UdpDiscoverResult>(UdpDiscoverResult.AwaitingDiscovery)
     val discoverResult: StateFlow<UdpDiscoverResult> = _discoverResult
 
-    fun DiscoverPc(){
+    fun discoverPc(){
         viewModelScope.launch(Dispatchers.IO) {
             _discoverResult.value = UdpDiscoverResult.AwaitingDiscovery
             _discoverResult.value = UdpDiscoverPc().discoverPc()

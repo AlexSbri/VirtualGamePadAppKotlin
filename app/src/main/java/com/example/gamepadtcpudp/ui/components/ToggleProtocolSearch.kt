@@ -77,6 +77,6 @@ fun tcpForm(){
 @Composable
 fun udpButton(viewModel: UdpDiscoverPcViewModel){
     ButtonDiscovery {
-        viewModel.DiscoverPc()
+        viewModel.discoverPc()
     }
 }

@@ -73,8 +73,7 @@ fun ConnectionScreenView(navController: NavHostController,tcpConnectionviewModel
     val isConnected by tcpConnectionviewModel.isConnected.collectAsState()
     val result by udpDiscoverPcViewModel.discoverResult.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-
-    //TODO: CREARE IL CAN CONNECT IN BASE A RESULT FOUND O NOT FOUND
+    val canConnect = remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -97,22 +96,28 @@ fun ConnectionScreenView(navController: NavHostController,tcpConnectionviewModel
             Spacer(modifier = Modifier.height(8.dp))
             //ToggleProtocoSearch(udpDiscoverPcViewModel)
             ButtonDiscovery {
-                udpDiscoverPcViewModel.DiscoverPc()
+                udpDiscoverPcViewModel.discoverPc()
             }
 
             LaunchedEffect(result) {
                 when(result){
-                    is UdpDiscoverResult.Found ->snackbarHostState.showSnackbar("Pc trovato")
-                    is UdpDiscoverResult.NotFound -> snackbarHostState.showSnackbar("Pc non trovato trovato, riprova Trova Pc")
-                    UdpDiscoverResult.AwaitingDiscovery -> snackbarHostState.showSnackbar("Attesa della ricerca del Pc")
+                    is UdpDiscoverResult.Found -> {
+                        snackbarHostState.showSnackbar("Pc trovato")
+                        canConnect.value = true
+                    }
+                    is UdpDiscoverResult.NotFound -> {
+                        snackbarHostState.showSnackbar("Pc non trovato trovato, riprova Trova Pc")
+                        canConnect.value=false
+                    }
+                    UdpDiscoverResult.AwaitingDiscovery -> {
+                        snackbarHostState.showSnackbar("Attesa della ricerca del Pc")
+                        canConnect.value=false
+                    }
                 }
             }
 
 
-            ButtonConnect(enabled = true ) { //TODO: ENABLED = CanConnect ed eliminare questo if and else
-                if (result is UdpDiscoverResult.Found) tcpConnectionviewModel.connectToPc(result)
-                else Log.d("NESSUN PC","NON è possibile connettersi")
-            }
+            ButtonConnect(enabled = canConnect.value ) {tcpConnectionviewModel.connectToPc(udpDiscoverPc = result)}
             GamepadIcon()
             Spacer(modifier = Modifier.height(8.dp))
             StatusConnection(isConnected)

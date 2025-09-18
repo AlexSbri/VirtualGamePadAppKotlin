@@ -22,7 +22,7 @@ class TcpConnectionViewModel : ViewModel() {
 
     fun connectToPc(udpDiscoverPc: UdpDiscoverResult){
         viewModelScope.launch(Dispatchers.IO) {
-            tcpConnection.connectPc(udpDiscoverPc)
+            _isConnected.value = tcpConnection.connectPc(udpDiscoverPc)
         }
     }
 
