@@ -19,8 +19,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -69,12 +72,14 @@ fun ConnectionScreenView(navController: NavHostController,tcpConnectionviewModel
     val udpDiscoverPcViewModel : UdpDiscoverPcViewModel = viewModel()
     val isConnected by tcpConnectionviewModel.isConnected.collectAsState()
     val result by udpDiscoverPcViewModel.discoverResult.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    TODO("commento è esplicativo")// CREARE IL CAN CONNECT IN BASE A RESULT FOUND O NOT FOUND
+    //TODO: CREARE IL CAN CONNECT IN BASE A RESULT FOUND O NOT FOUND
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
-        topBar = { TopBarGamePad("Connessione PC") }
+        topBar = { TopBarGamePad("Connessione PC") },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
         innerpadding ->
     Box(
@@ -93,18 +98,18 @@ fun ConnectionScreenView(navController: NavHostController,tcpConnectionviewModel
             //ToggleProtocoSearch(udpDiscoverPcViewModel)
             ButtonDiscovery {
                 udpDiscoverPcViewModel.DiscoverPc()
-                //questa cosa qui non va bene , vedere di fare in un altro modo
             }
 
-            TODO("commento sotto")
-            when (result) {
-                is UdpDiscoverResult.Found -> Log.d("TROVATO","TROVATO PC")// SOSTITUIRE CON UN TOAST
-                is UdpDiscoverResult.NotFound -> Log.d("NON TROVATO","NON TROVATO PC") // SOSTITUIRE CON UN TOAST
-                UdpDiscoverResult.AwaitingDiscovery -> TODO()
+            LaunchedEffect(result) {
+                when(result){
+                    is UdpDiscoverResult.Found ->snackbarHostState.showSnackbar("Pc trovato")
+                    is UdpDiscoverResult.NotFound -> snackbarHostState.showSnackbar("Pc non trovato trovato, riprova Trova Pc")
+                    UdpDiscoverResult.AwaitingDiscovery -> snackbarHostState.showSnackbar("Attesa della ricerca del Pc")
+                }
             }
 
-            TODO("commento sotto")
-            ButtonConnect(enabled = true ) { // ENABLED = CanConnect ed eliminare questo if and else
+
+            ButtonConnect(enabled = true ) { //TODO: ENABLED = CanConnect ed eliminare questo if and else
                 if (result is UdpDiscoverResult.Found) tcpConnectionviewModel.connectToPc(result)
                 else Log.d("NESSUN PC","NON è possibile connettersi")
             }

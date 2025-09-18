@@ -14,21 +14,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class UdpDiscoverPcViewModel : ViewModel() {
-    private val _discoverResult = MutableStateFlow<UdpDiscoverResult>(UdpDiscoverResult.NotFound)
+    private val _discoverResult = MutableStateFlow<UdpDiscoverResult>(UdpDiscoverResult.AwaitingDiscovery)
     val discoverResult: StateFlow<UdpDiscoverResult> = _discoverResult
-
-
-    var discoverData : UdpDiscoverResult = UdpDiscoverResult.NotFound
 
     fun DiscoverPc(){
         viewModelScope.launch(Dispatchers.IO) {
+            _discoverResult.value = UdpDiscoverResult.AwaitingDiscovery
             _discoverResult.value = UdpDiscoverPc().discoverPc()
-            when(_discoverResult.value){
-                is UdpDiscoverResult.Found -> Log.d("VIEWMODEL UDP", "TCP ADDRESSS ::: ${discoverData}")
-                UdpDiscoverResult.NotFound -> Log.d("VIEWMODEL UDP", "TCP ADDRESSS ::: NOT FOUND")
-                UdpDiscoverResult.AwaitingDiscovery -> TODO()
-            }
-            Log.d("VIEWMODEL UDP", "TCP ADDRESSS ::: ${discoverData}")
+
+            Log.d("Discover Pc","DiscoverResult value ::${_discoverResult.value}")
         }
     }
 }
