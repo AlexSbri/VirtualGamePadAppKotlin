@@ -81,6 +81,12 @@ fun GamePadScreen(tcpConnectionviewModel: TcpConnectionViewModel) {
                 .align(Alignment.BottomStart)
                 .padding(32.dp),
             onMove = controller::onAnalogMove)
+        VirtualJoystick(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(32.dp),
+            onMove = controller::onRightAnalogMove
+        )
         ButtonShoulders(tcpConnectionviewModel)
         ButtonRightScreen(tcpConnectionviewModel)
         ButtonCenters(tcpConnectionviewModel)

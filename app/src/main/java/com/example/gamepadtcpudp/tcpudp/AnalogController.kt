@@ -2,6 +2,7 @@ package com.example.gamepadtcpudp.tcpudp
 
 import android.util.Log
 import androidx.compose.ui.geometry.Offset
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 class AnalogController(
@@ -67,4 +68,29 @@ class AnalogController(
         if (leftPressed) { sendCommand("LEFT_UP"); leftPressed = false }
         if (rightPressed) { sendCommand("RIGHT_UP"); rightPressed = false }
     }
+
+    fun onRightAnalogMove(offset: Offset) {
+        val sensitivity = 5f           // Regola la velocità del movimento
+        val deadZone = 0.1f            // Ignora piccoli movimenti involontari
+        val maxDelta = 30f              // Limita il movimento massimo per evitare scatti
+
+        // Applica zona morta
+        if (abs(offset.x) < deadZone && abs(offset.y) < deadZone) return
+
+        // Calcola delta con sensibilità
+        var deltaX = offset.x * sensitivity
+        var deltaY = offset.y * sensitivity
+
+        // Limita il delta massimo
+        deltaX = deltaX.coerceIn(-maxDelta, maxDelta)
+        deltaY = deltaY.coerceIn(-maxDelta, maxDelta)
+
+        // Arrotonda per evitare valori troppo precisi
+        val roundedX = deltaX.toInt()
+        val roundedY = deltaY.toInt()
+
+        // Invia comando al PC
+        sendCommand("MOUSE_${roundedX}_${roundedY}")
+    }
+
 }
