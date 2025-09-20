@@ -47,9 +47,15 @@ class TcpConnection {
         }
     }
 
-    fun closeSocket(){
-        socket?.close()
-        socket = null
+    fun closeSocket(): Boolean{
+        return try {
+            socket?.close()
+            socket = null
+            return false
+        }catch (e: IOException) {
+            Log.d("CloseSocket", "exception chiiusura: $e")
+            false
+        }
     }
 
     fun isSocketAlive(): Boolean {

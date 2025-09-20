@@ -65,3 +65,17 @@ fun ButtonToGamePad(onClick: () -> Unit){
         Text("GamePad")
     }
 }
+
+@Composable
+fun ButtonDisconect(onClick: () -> Unit){
+    Button(
+        onClick=onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.error,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        )
+    ) {
+        Text("Disconnetti")
+    }
+}

@@ -39,4 +39,9 @@ class TcpConnectionViewModel : ViewModel() {
             }.await()
         }
     }
+    fun disconnectPc(){
+        viewModelScope.launch {
+            _isConnected.value = tcpConnection.closeSocket()
+        }
+    }
 }

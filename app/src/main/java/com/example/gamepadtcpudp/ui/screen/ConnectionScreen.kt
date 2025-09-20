@@ -65,6 +65,7 @@ import kotlinx.coroutines.launch
 import java.nio.file.WatchEvent
 import com.example.gamepadtcpudp.R
 import com.example.gamepadtcpudp.tcpudp.UdpDiscoverResult
+import com.example.gamepadtcpudp.ui.components.ButtonDisconect
 
 
 @Composable
@@ -125,6 +126,7 @@ fun ConnectionScreenView(navController: NavHostController,tcpConnectionviewModel
             ButtonToGamePad {
                 navController.navigate("GamePad")
             }
+            ButtonDisconect { tcpConnectionviewModel.disconnectPc()}
 
         }
     }
